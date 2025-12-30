@@ -1,0 +1,11 @@
+pyrogram==2.0.0
+aiohttp
+pyttanko
+osrparse
+python-dotenv
+Pillow
+matplotlib
+numpy
+requests
+pycountry
+pytest
