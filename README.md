@@ -37,6 +37,19 @@ python bot.py
 
 Use `screen`/`tmux` or a process manager (systemd, pm2, supervisor) for production deployments.
 
+## Commands
+
+For a full list of commands and usage examples, see [COMMANDS.md](COMMANDS.md).
+
+Quick examples:
+- `/bind <username>` — link your osu!droid account
+- `/map <url>` — get beatmap info
+- `/pp #osu/<id>` — calculate PP
+- `/topplays` — view your top plays
+- `/prpic` — generate profile card
+- `/ppgraph` — plot PP history
+- `/compare <user1> <user2>` — compare players
+
 ## Tests
 
 Run the test-suite locally:
