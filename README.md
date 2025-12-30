@@ -2,6 +2,8 @@
 
 A Telegram bot for osu!droid — profile cards, pp calculations, top plays, graphs and more.
 
+Bot link: https://t.me/AltPippiBot (t.me/@AltPippiBot)
+
 ## Requirements
 
 - Python 3.11+
