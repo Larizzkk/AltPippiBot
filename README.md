@@ -4,6 +4,8 @@ Telegram bot for osu!droid and osu! — generate profile cards, calculate PP/DPP
 
 Bot link: https://t.me/AltPippiBot (t.me/@AltPippiBot)
 
+
+You can follow bot updates directly in Telegram (https://t.me/larizkaosudroid/541)
 ## Requirements
 
 - Python 3.11+
