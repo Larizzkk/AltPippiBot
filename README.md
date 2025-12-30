@@ -62,3 +62,11 @@ pytest -q
 
 PRs are welcome. Please add tests for new features and keep changes small and focused.
 
+## License
+
+This project is dual-licensed under:
+- **MIT** (see [LICENSE](LICENSE))
+- **Apache License 2.0** (optional alternative)
+
+You may use, modify, and distribute this software under the terms of either license.
+
