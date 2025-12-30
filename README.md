@@ -2,8 +2,6 @@
 
 A Telegram bot for osu!droid — profile cards, pp calculations, top plays, graphs and more.
 
-**Maintained by:** Lift
-
 ## Requirements
 
 - Python 3.11+
@@ -44,13 +42,13 @@ Use `screen`/`tmux` or a process manager (systemd, pm2, supervisor) for producti
 For a full list of commands and usage examples, see [COMMANDS.md](COMMANDS.md).
 
 Quick examples:
-- `/bind <username>` — link your osu!droid account
+- `/bind Lift` — link your osu!droid account
 - `/map <url>` — get beatmap info
 - `/pp #osu/<id>` — calculate PP
 - `/topplays` — view your top plays
-- `/prpic` — generate profile card
-- `/ppgraph` — plot PP history
-- `/compare <user1> <user2>` — compare players
+- `/prpic Lift` — generate profile card
+- `/ppgraph Lift` — plot PP history
+- `/compare Lift Cookiezi` — compare players
 
 ## Tests
 

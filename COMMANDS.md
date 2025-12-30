@@ -16,7 +16,7 @@ Bind your osu!droid account to access personalized commands.
 ```
 /bind <username>
 ```
-Example: `/bind Rafis`
+Example: `/bind Lift`
 
 ---
 
@@ -103,7 +103,7 @@ Generate a profile card for a player.
 ```
 Examples:
 - `/prpic` — your bound account as photo
-- `/prpic Rafis photo` — another player
+- `/prpic Lift photo` — another player
 - `/prpic text` — text-only version (stats)
 
 ### /topplays or /pr
@@ -114,7 +114,7 @@ View a player's top 50 plays with sorting options.
 ```
 Examples:
 - `/topplays` — your bound account
-- `/topplays Rafis` — another player
+- `/topplays Lift` — another player
 
 Buttons: sort by PP or date, navigate between plays.
 
@@ -123,37 +123,42 @@ Plot a player's PP progress over last 30 days.
 ```
 /ppgraph [username]
 ```
+Example: `/ppgraph Lift`
 
 ### /accuracygraph
 Plot a player's accuracy trend over last 30 days.
 ```
 /accuracygraph [username]
 ```
+Example: `/accuracygraph Lift`
 
 ### /compare
 Compare stats between two players.
 ```
 /compare <username1> <username2>
 ```
-Example: `/compare Rafis Cookiezi`
+Example: `/compare Lift Cookiezi`
 
 ### /comparepic
 Generate a comparison card (visual) between two players.
 ```
 /comparepic <username1> <username2>
 ```
+Example: `/comparepic Lift Cookiezi`
 
 ### /recommend
 Get beatmap recommendations based on a player's top plays.
 ```
 /recommend [username]
 ```
+Example: `/recommend Lift`
 
 ### /milestone
 Check progress towards common milestones (PP, playcount, accuracy).
 ```
 /milestone [username]
 ```
+Example: `/milestone Lift`
 
 ---
 
@@ -164,7 +169,7 @@ Show mod distribution in a player's top 50 plays.
 ```
 /modstats <username>
 ```
-Example: `/modstats Rafis`
+Example: `/modstats Lift`
 
 ### /toplist
 Browse global leaderboard (by score or pp).
