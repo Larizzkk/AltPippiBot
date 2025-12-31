@@ -40,6 +40,12 @@ Download a beatmap (.osz file).
 ```
 Example: `/dw https://osu.ppy.sh/beatmapsets/1234567`
 
+Download a beatmap (.osz file) but in mirror site.
+```
+/dwm <link>
+```
+Example: `/dwm https://osu.ppy.sh/beatmapsets/1234567`
+
 ### /sr
 Search for beatmaps by query.
 ```
