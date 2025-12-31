@@ -1,4 +1,4 @@
-Please read the disclaimer first
+## Please read the disclaimer first
 
 [DISCLAIMER](https://github.com/Larizzkk/AltPippiBot/blob/main/DISCLAIMER.txt)
 
