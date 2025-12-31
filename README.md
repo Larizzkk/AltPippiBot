@@ -1,3 +1,7 @@
+Please read the disclaimer first
+
+[DISCLAIMER](https://github.com/Larizzkk/AltPippiBot/blob/main/DISCLAIMER.txt)
+
 # AltPippiBot
 
 Telegram bot for osu!droid and osu! — generate profile cards, calculate PP/DPP, show top plays, beatmap info, replay analysis, and visual graphs. Invite AltPippiBot to your chat to fetch player stats, compare users, and create shareable profile images and charts.
