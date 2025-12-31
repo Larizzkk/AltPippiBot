@@ -14,6 +14,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import tempfile
+from pyrogram import types
 from functools import partial
 from datetime import datetime, timedelta
 import numpy as np
@@ -62,6 +63,7 @@ RE_BID = re.compile(r"#osu/(\d+)")
 RE_ACC = re.compile(r"(\d+\.?\d*)%")
 RE_MODS = re.compile(r"\+([A-Z]+)")
 RE_URL_BID = re.compile(r"osu\.ppy\.sh/(?:b/|beatmapsets/\d+#osu/)(\d+)")
+DOWNLOAD_DIR = os.path.join(os.path.dirname(__file__), "downloads")
 
 # ============ GLOBAL STATE ============
 session = None
@@ -1223,36 +1225,66 @@ async def dpp_cmd(_, msg):
     uid = msg.from_user.id
     args = msg.command
     if len(args) < 2:
-        return await msg.reply_text(t(uid, "dpp_help"))
+        return await msg.reply_text("/dpp <beatmap_id_or_url> [mods] [acc]")
 
-    beatmap_id = args[1]
+    link = args[1]
+    m = re.search(r"beatmaps/(\d+)", link)
+    if m:
+        beatmap_id = m.group(1)
+    else:
+        m = re.search(r"#osu/(\d+)", link)
+        if m:
+            beatmap_id = m.group(1)
+        else:
+            m = re.search(r"beatmapsets/(\d+)", link)
+            if m:
+                beatmap_id = m.group(1)
+            else:
+                return await msg.reply_text("Invalid beatmap link")
+
     mods = args[2] if len(args) > 2 else ""
-    acc = float(args[3]) if len(args) > 3 else None
+    acc = str(float(args[3])) if len(args) > 3 else ""
 
     form = aiohttp.FormData()
+    form.add_field("beatmapfile", "", content_type="application/octet-stream")
     form.add_field("beatmaplink", beatmap_id)
     form.add_field("mods", mods)
-    form.add_field("accuracy", str(acc) if acc else "")
+    form.add_field("accuracy", acc)
     form.add_field("combo", "")
     form.add_field("misses", "")
+    form.add_field("speedmultiplier", "")
+    form.add_field("forcecs", "")
+    form.add_field("forcear", "")
+    form.add_field("forceod", "")
     form.add_field("generatestrainchart", "1")
 
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(DPP_API_URL, data=form) as resp:
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.post(DPP_API_URL, data=form, timeout=30) as resp:
+                if resp.status != 200:
+                    return await msg.reply_text(f"API error: HTTP {resp.status}")
                 response = await resp.json()
+        except Exception as e:
+            return await msg.reply_text(f"Ошибка расчёта DPP: {e}")
 
-        if not response.get("performance"):
-            return await msg.reply_text(t(uid, "dpp_error_response"))
+    if not response.get("performance"):
+        return await msg.reply_text(f"Ошибка расчёта DPP, ответ: {response}")
 
-        beatmap = response.get("beatmap", {})
-        perf = response.get("performance", {}).get("droid", {})
+    beatmap = response.get("beatmap", {})
+    perf = response.get("performance", {}).get("droid", {})
 
-        text = f"{beatmap.get('artist', 'Unknown')} - {beatmap.get('title', 'Unknown')} [{beatmap.get('version', 'Unknown')}]\nTotal DPP: {perf.get('total', 0.0):.2f}\nAim: {perf.get('aim', 0.0):.2f}, Speed: {perf.get('speed', 0.0):.2f}, Accuracy: {perf.get('accuracy', 0.0):.2f}\nMods: {mods or 'NM'}"
-        await msg.reply_text(text)
-    except Exception as e:
-        await msg.reply_text(t(uid, "dpp_error", e=str(e)))
+    text = (
+        f"{beatmap.get('artist', 'Unknown')} - {beatmap.get('title', 'Unknown')} "
+        f"[{beatmap.get('version', 'Unknown')}]\n"
+        f"Total DPP: {perf.get('total', 0.0):.2f}\n"
+        f"Aim: {perf.get('aim', 0.0):.2f}, "
+        f"Speed: {perf.get('speed', 0.0):.2f}, "
+        f"Accuracy: {perf.get('accuracy', 0.0):.2f}\n"
+        f"Mods: {mods or 'NM'}"
+    )
 
+    await msg.reply_text(text)
+    
 @app.on_message(filters.command("yn"))
 async def yn_cmd(_, msg):
     await msg.reply_text(random.choice(["yep", "nope"]))
@@ -2086,6 +2118,73 @@ async def cmd_accuracygraph(_, message):
     except Exception as e:
         log.exception("AccuracyGraph failed")
         await msg.edit_text(f"Error: {str(e)}")
+        
+async def download_from_mirrors(beatmapset_id: str, no_video: bool = True):
+    suffix = "?noVideo=1" if no_video else ""
+    mirrors = [
+        f"https://api.nerinyan.moe/d/{beatmapset_id}{suffix}",
+        f"https://osu.direct/api/d/{beatmapset_id}{suffix}"
+    ]
+    data = None
+    for url in mirrors:
+        try:
+            log.info(f"Trying mirror: {url}")
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, timeout=30) as r:
+                    if r.status == 200:
+                        data = await r.read()
+                        log.info(f"Downloaded {len(data)} bytes from {url}")
+                        break
+                    else:
+                        log.warning(f"Mirror returned HTTP {r.status}: {url}")
+        except Exception as e:
+            log.error(f"Error downloading from {url}: {e}")
+            continue
+    return data
+
+@app.on_message(filters.command("dwm"))
+async def cmd_dwm(_, message):
+    m = RE_MAPSET.search(" ".join(message.command[1:]))
+    if not m:
+        return await message.reply_text("Invalid link!")
+
+    beatmapset_id = m.group(1)
+    buttons = [
+        [types.InlineKeyboardButton("With Video", callback_data=f"{beatmapset_id}|0")],
+        [types.InlineKeyboardButton("No Video", callback_data=f"{beatmapset_id}|1")]
+    ]
+    keyboard = types.InlineKeyboardMarkup(buttons)
+    await message.reply_text("Choose download type:", reply_markup=keyboard)
+
+@app.on_callback_query()
+async def callback_dwm(_, callback_query):
+    beatmapset_id, no_video_flag = callback_query.data.split("|")
+    no_video = no_video_flag == "1"
+    path = os.path.join(DOWNLOAD_DIR, f"{beatmapset_id}.osz")
+
+    await callback_query.message.edit_text(f"Downloading beatmapset {beatmapset_id}...")
+
+    try:
+        data = await download_from_mirrors(beatmapset_id, no_video=no_video)
+        if not data:
+            await callback_query.message.edit_text("All mirrors failed")
+            return
+
+        with open(path, "wb") as f:
+            f.write(data)
+        log.info(f"Saved file to {path}")
+
+        await callback_query.message.edit_text("Uploading file...")
+        await callback_query.message.reply_document(path, caption=f"Beatmapset {beatmapset_id}")
+
+    except Exception as e:
+        log.error(f"Download error for {beatmapset_id}: {e}")
+        await callback_query.message.edit_text(f"Download error: {e}")
+
+    finally:
+        if os.path.exists(path):
+            os.remove(path)
+            log.info(f"Deleted local file {path}")
 
 if __name__ == "__main__":
     log.info("Bot starting")
