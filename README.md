@@ -100,3 +100,4 @@ This project is dual-licensed under:
 
 You may use, modify, and distribute this software under the terms of either license.
 
+All questions or support to here [DEV CHANNEL](https://t.me/larizkaosudroid)
