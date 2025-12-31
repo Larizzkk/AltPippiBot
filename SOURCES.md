@@ -30,6 +30,14 @@ Droid PP (Difficulty-adjusted Performance Points) calculation for custom mods an
 - **aiohttp**: Async HTTP client for API calls
 - **pycountry**: Country code/name lookup
 
+## Font
+
+- You can use any font, but sometimes it won't fit and you'll have to change the font size.
+
+- (I'm using the TORUS LIGHT font)
+
+- Be sure to rename the font file to font.ttf
+
 ## Development
 
 For local testing and CI setup, see [README.md](README.md) and [CHANGELOG.md](CHANGELOG.md).
