@@ -80,18 +80,13 @@ Run the test-suite locally:
 pytest -q
 ```
 
-## Release checklist
-
-- Update `VERSION` and add notes to `CHANGELOG.md` under a new version heading
-- Run tests and linters in CI
-- Create a signed tag and a GitHub Release
-- Rotate any secrets that were exposed (BOT token, API keys)
-
 ## Security
 
 - Do not commit `.env` or any secret files. Use GitHub Secrets for CI and environment variables on hosting services.
 - After removing secrets from history, rotate keys immediately.
 - Make the repository private if you don't want public visibility.
+
+## Be sure to create a folder called downloads
 
 ## Contributing
 
