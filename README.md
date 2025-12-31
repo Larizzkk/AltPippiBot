@@ -14,12 +14,13 @@ THE AUTHOR DOES NOT TAKE RESPONSIBILITY FOR ANY ACTIONS PERFORMED BY THIRD PARTI
 
 THE USER IS SOLELY RESPONSIBLE FOR ENSURING COMPLIANCE WITH ALL APPLICABLE LAWS, REGULATIONS, AND POLICIES WHEN USING, MODIFYING, OR DISTRIBUTING THIS SOFTWARE.
 
+This bot does not use this code and has its own unique code that does not use osu cookies (to protect your account, I recommend using mirrors)
 
 # AltPippiBot
 
 Telegram bot for osu!droid and osu! — generate profile cards, calculate PP/DPP, show top plays, beatmap info, replay analysis, and visual graphs. Invite AltPippiBot to your chat to fetch player stats, compare users, and create shareable profile images and charts.
 
-Bot link: https://t.me/AltPippiBot (t.me/@AltPippiBot)
+Bot link: https://t.me/AltPippiBot (t.me/@AltPippiBot) 
 
 
 You can follow bot updates directly in Telegram (https://t.me/larizkaosudroid/541)
